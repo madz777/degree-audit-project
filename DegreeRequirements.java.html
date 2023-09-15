@@ -1,0 +1,126 @@
+<html>
+<head>
+<title>DegreeRequirements.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #808080;}
+.s1 { color: #a9b7c6;}
+.s2 { color: #cc7832;}
+.s3 { color: #6a8759;}
+</style>
+</head>
+<body bgcolor="#2b2b2b">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+DegreeRequirements.java</font>
+</center></td></tr></table>
+<pre><span class="s0">//We've introduced a DegreeProgram class that represents a degree program and its required courses.</span>
+<span class="s0">//Each DegreeProgram object has a name and a list of required courses.</span>
+<span class="s0">//The compileAllCourses method compiles all courses from different degree programs into a unified list.</span>
+<span class="s0">//The initializeDegreePrograms method creates and initializes DegreeProgram objects for different branches and adds them to the degreePrograms map.</span>
+<span class="s0">//When the user enters a Major path, the program looks up the corresponding DegreeProgram object and displays the required courses for that program.</span>
+<span class="s0">//If the Major path is not found, it provides an error message.</span>
+<span class="s0">//The code I provided does not include a traditional external database management system (e.g., MySQL, PostgreSQL, SQLite) because it uses in-memory data structures like HashMap and ArrayList to store and manage the data.</span>
+<span class="s0">//However, in this context, the degreePrograms map serves as a simple database for storing degree program information and their associated courses.</span>
+
+<span class="s2">import </span><span class="s1">java.util.*</span><span class="s2">;</span>
+
+<span class="s2">class </span><span class="s1">Course {</span>
+    <span class="s2">private </span><span class="s1">String name</span><span class="s2">;</span>
+    <span class="s2">private </span><span class="s1">String branch</span><span class="s2">;</span>
+
+    <span class="s2">public </span><span class="s1">Course(String name</span><span class="s2">, </span><span class="s1">String branch) {</span>
+        <span class="s2">this</span><span class="s1">.name = name</span><span class="s2">;</span>
+        <span class="s2">this</span><span class="s1">.branch = branch</span><span class="s2">;</span>
+    <span class="s1">}</span>
+
+    <span class="s2">public </span><span class="s1">String getName() {</span>
+        <span class="s2">return </span><span class="s1">name</span><span class="s2">;</span>
+    <span class="s1">}</span>
+
+    <span class="s2">public </span><span class="s1">String getBranch() {</span>
+        <span class="s2">return </span><span class="s1">branch</span><span class="s2">;</span>
+    <span class="s1">}</span>
+<span class="s1">}</span>
+
+<span class="s2">class </span><span class="s1">DegreeProgram {</span>
+    <span class="s2">private </span><span class="s1">String name</span><span class="s2">;</span>
+    <span class="s2">private </span><span class="s1">List&lt;Course&gt; requiredCourses</span><span class="s2">;</span>
+
+    <span class="s2">public </span><span class="s1">DegreeProgram(String name) {</span>
+        <span class="s2">this</span><span class="s1">.name = name</span><span class="s2">;</span>
+        <span class="s2">this</span><span class="s1">.requiredCourses = </span><span class="s2">new </span><span class="s1">ArrayList&lt;&gt;()</span><span class="s2">;</span>
+    <span class="s1">}</span>
+
+    <span class="s2">public </span><span class="s1">String getName() {</span>
+        <span class="s2">return </span><span class="s1">name</span><span class="s2">;</span>
+    <span class="s1">}</span>
+
+    <span class="s2">public </span><span class="s1">List&lt;Course&gt; getRequiredCourses() {</span>
+        <span class="s2">return </span><span class="s1">requiredCourses</span><span class="s2">;</span>
+    <span class="s1">}</span>
+
+    <span class="s2">public void </span><span class="s1">addRequiredCourse(Course course) {</span>
+        <span class="s1">requiredCourses.add(course)</span><span class="s2">;</span>
+    <span class="s1">}</span>
+<span class="s1">}</span>
+
+<span class="s2">public class </span><span class="s1">DegreeRequirements {</span>
+    <span class="s2">private static </span><span class="s1">Map&lt;String</span><span class="s2">, </span><span class="s1">DegreeProgram&gt; degreePrograms = </span><span class="s2">new </span><span class="s1">HashMap&lt;&gt;()</span><span class="s2">;</span>
+
+    <span class="s2">public static void </span><span class="s1">main(String[] args) {</span>
+        <span class="s1">initializeDegreePrograms()</span><span class="s2">;</span>
+
+        <span class="s0">// Compile all courses into a unified database</span>
+        <span class="s1">List&lt;Course&gt; allCourses = compileAllCourses()</span><span class="s2">;</span>
+
+        <span class="s0">// Create a database of courses based on the user's inputted Major path</span>
+        <span class="s1">Scanner scanner = </span><span class="s2">new </span><span class="s1">Scanner(System.in)</span><span class="s2">;</span>
+        <span class="s1">System.out.print(</span><span class="s3">&quot;Enter your Major path (e.g., Bachelor of Science, School of Music, School of Business): &quot;</span><span class="s1">)</span><span class="s2">;</span>
+        <span class="s1">String majorPath = scanner.nextLine()</span><span class="s2">;</span>
+
+        <span class="s1">DegreeProgram selectedProgram = degreePrograms.get(majorPath)</span><span class="s2">;</span>
+
+        <span class="s2">if </span><span class="s1">(selectedProgram != </span><span class="s2">null</span><span class="s1">) {</span>
+            <span class="s1">List&lt;Course&gt; requiredCourses = selectedProgram.getRequiredCourses()</span><span class="s2">;</span>
+
+            <span class="s0">// Display the required courses for the selected Major path</span>
+            <span class="s1">System.out.println(</span><span class="s3">&quot;Required courses for &quot; </span><span class="s1">+ majorPath + </span><span class="s3">&quot;:&quot;</span><span class="s1">)</span><span class="s2">;</span>
+            <span class="s2">for </span><span class="s1">(Course course : requiredCourses) {</span>
+                <span class="s1">System.out.println(course.getName())</span><span class="s2">;</span>
+            <span class="s1">}</span>
+        <span class="s1">} </span><span class="s2">else </span><span class="s1">{</span>
+            <span class="s1">System.out.println(</span><span class="s3">&quot;Major path not found.&quot;</span><span class="s1">)</span><span class="s2">;</span>
+        <span class="s1">}</span>
+    <span class="s1">}</span>
+
+    <span class="s2">private static </span><span class="s1">List&lt;Course&gt; compileAllCourses() {</span>
+        <span class="s1">List&lt;Course&gt; allCourses = </span><span class="s2">new </span><span class="s1">ArrayList&lt;&gt;()</span><span class="s2">;</span>
+        <span class="s2">for </span><span class="s1">(DegreeProgram program : degreePrograms.values()) {</span>
+            <span class="s1">allCourses.addAll(program.getRequiredCourses())</span><span class="s2">;</span>
+        <span class="s1">}</span>
+        <span class="s2">return </span><span class="s1">allCourses</span><span class="s2">;</span>
+    <span class="s1">}</span>
+
+    <span class="s2">private static void </span><span class="s1">initializeDegreePrograms() {</span>
+        <span class="s0">// Create and initialize DegreeProgram objects for different branches</span>
+        <span class="s1">DegreeProgram scienceProgram = </span><span class="s2">new </span><span class="s1">DegreeProgram(</span><span class="s3">&quot;Bachelor of Science&quot;</span><span class="s1">)</span><span class="s2">;</span>
+        <span class="s1">scienceProgram.addRequiredCourse(</span><span class="s2">new </span><span class="s1">Course(</span><span class="s3">&quot;Biology 101&quot;</span><span class="s2">, </span><span class="s3">&quot;Bachelor of Science&quot;</span><span class="s1">))</span><span class="s2">;</span>
+        <span class="s1">scienceProgram.addRequiredCourse(</span><span class="s2">new </span><span class="s1">Course(</span><span class="s3">&quot;Chemistry 101&quot;</span><span class="s2">, </span><span class="s3">&quot;Bachelor of Science&quot;</span><span class="s1">))</span><span class="s2">;</span>
+        <span class="s1">degreePrograms.put(</span><span class="s3">&quot;Bachelor of Science&quot;</span><span class="s2">, </span><span class="s1">scienceProgram)</span><span class="s2">;</span>
+
+        <span class="s1">DegreeProgram musicProgram = </span><span class="s2">new </span><span class="s1">DegreeProgram(</span><span class="s3">&quot;School of Music&quot;</span><span class="s1">)</span><span class="s2">;</span>
+        <span class="s1">musicProgram.addRequiredCourse(</span><span class="s2">new </span><span class="s1">Course(</span><span class="s3">&quot;Music Theory 101&quot;</span><span class="s2">, </span><span class="s3">&quot;School of Music&quot;</span><span class="s1">))</span><span class="s2">;</span>
+        <span class="s1">degreePrograms.put(</span><span class="s3">&quot;School of Music&quot;</span><span class="s2">, </span><span class="s1">musicProgram)</span><span class="s2">;</span>
+
+        <span class="s1">DegreeProgram businessProgram = </span><span class="s2">new </span><span class="s1">DegreeProgram(</span><span class="s3">&quot;School of Business&quot;</span><span class="s1">)</span><span class="s2">;</span>
+        <span class="s1">businessProgram.addRequiredCourse(</span><span class="s2">new </span><span class="s1">Course(</span><span class="s3">&quot;Business Ethics&quot;</span><span class="s2">, </span><span class="s3">&quot;School of Business&quot;</span><span class="s1">))</span><span class="s2">;</span>
+        <span class="s1">degreePrograms.put(</span><span class="s3">&quot;School of Business&quot;</span><span class="s2">, </span><span class="s1">businessProgram)</span><span class="s2">;</span>
+
+        <span class="s0">// Add more DegreePrograms and required courses as needed</span>
+    <span class="s1">}</span>
+<span class="s1">}</span>
+</pre>
+</body>
+</html>
